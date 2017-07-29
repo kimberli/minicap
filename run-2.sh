@@ -2,6 +2,8 @@
 
 serial=7519ab65
 port=8889
+width=1080
+height=1920
 
 # Fail on error, verbose output
 set -exo pipefail
@@ -26,19 +28,10 @@ else
   bin=minicap-nopie
 fi
 
-args=
-if [ "$1" = "autosize" ]; then
-  set +o pipefail
-  size=$(adb -s $serial shell dumpsys window | grep -Eo 'init=\d+x\d+' | head -1 | cut -d= -f 2)
-  if [ "$size" = "" ]; then
-    w=$(adb -s $serial shell dumpsys window | grep -Eo 'DisplayWidth=\d+' | head -1 | cut -d= -f 2)
-    h=$(adb -s $serial shell dumpsys window | grep -Eo 'DisplayHeight=\d+' | head -1 | cut -d= -f 2)
-    size="${w}x${h}"
-  fi
-  args="-P $size@$size/0"
-  set -o pipefail
-  shift
-fi
+w=$width
+h=$height
+size="${w}x${h}"
+args="-P $size@$size/0"
 
 # Create a directory for our resources
 dir=/data/local/tmp/minicap-devel

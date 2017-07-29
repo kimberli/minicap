@@ -9,12 +9,14 @@ export PATH="/Users/<username>/Library/Android/sdk/platform-tools:$PATH"
 export PATH="/Users/<username>/Library/Android/sdk/ndk-bundle:$PATH"
 ```
 
-Edit each `run.sh` to include the serial number of each device (you can get this by running `adb devices`). Also make sure the scripts use different ports (which they should).
+Edit each `run.sh` to include the serial number of each device (you can get this by running `adb devices`). Also make sure the scripts use different ports (which they should). 
+
+We also had to manually set the screen size because the command that automatically detects the device screen size segfaults, so edit `width` and `height` in the script. (Our Samsung Galaxy S7s are 1080x1920.) Note that device 1 was in landscape mode in our mount. 
 
 ## Usage
-Run `run-1.sh autosize` and `run-2.sh autosize`.
+Run `run-1.sh` and `run-2.sh`.
 
-You can test to see if the basic minicap functionality works by running with the options `autosize -s` and then piping the output to a JPEG file, but you might have to remove the intermediate command outputs.
+You can test to see if the basic minicap functionality works by running with the options `-s` and then piping the output to a JPEG file, but you might have to remove the intermediate command outputs.
 
 To test the socket connection, use netcat (`nc <host> <port>`).
 

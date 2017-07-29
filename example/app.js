@@ -16,11 +16,11 @@ wss.on('connection', function(ws) {
   console.info('Got a client')
 
   var stream = net.connect({
-    port: 1717
+    port: 8888
   })
 
   stream.on('error', function() {
-    console.error('Be sure to run `adb forward tcp:1717 localabstract:minicap`')
+    console.error('Be sure to run `adb forward tcp:8888 localabstract:minicap`')
     process.exit(1)
   })
 
