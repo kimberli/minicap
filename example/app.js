@@ -3,6 +3,7 @@ var WebSocketServer = require('ws').Server
   , express = require('express')
   , path = require('path')
   , net = require('net')
+  , fs = require('fs')
   , app = express()
 
 var PORT = process.env.PORT || 9002
@@ -133,6 +134,18 @@ wss.on('connection', function(ws) {
                 'Frame body does not start with JPG header', frameBody)
               process.exit(1)
             }
+
+			var d = new Date();
+            var fileName = "out/ss-" + d.toISOString() + ".jpg";
+			fs.writeFile(fileName, frameBody, function(err) {
+    			if(err) {
+        			console.log(err);
+    			}
+                else {
+                    console.log("Wrote to " + fileName);
+                }
+			}); 
+
 
             ws.send(frameBody, {
               binary: true
