@@ -1,5 +1,17 @@
 # minicap
 
+## Setup
+Add the directories for `ndk-build` and `adb` to your `$PATH` (in `~/.bash_profile`). On a Mac, these might be in `/Users/<username>/Library/Android/sdk/ndk-bundle` and `/Users/<username>/Library/Android/sdk/platform-tools`.
+
+Edit each `run.sh` to include the serial number of each device (you can get this by running `adb devices`). 
+
+## Usage
+Run `run-1.sh autosize` and `run-2.sh autosize`.
+
+You can test to see if this works by running with the options `autosize -s` and then piping the output to a JPEG file, but you might have to remove the intermediate command outputs.
+
+# Original minicap documentation
+
 Minicap provides a socket interface for streaming realtime screen capture data out of Android devices. It is meant to be used as a component in a larger program and is therefore not immensely useful just by itself. For example, it is being used in [STF](https://github.com/openstf/stf) for remote control.
 
 Minicap works without root if started via [ADB](http://developer.android.com/tools/help/adb.html) on SDK 26 (Android O) and lower. The lowest SDK level we build for is 9 (i.e. Android 2.3). Minicap also works on Android Wear. Emulators, however, are not supported. Note that Android 3.x is not supported since those versions were never open sourced.
