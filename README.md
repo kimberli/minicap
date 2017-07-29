@@ -3,6 +3,12 @@
 ## Setup
 Add the directories for `ndk-build` and `adb` to your `$PATH` (in `~/.bash_profile`). On a Mac, these might be in `/Users/<username>/Library/Android/sdk/ndk-bundle` and `/Users/<username>/Library/Android/sdk/platform-tools`.
 
+```
+# android sdk
+export PATH="/Users/<username>/Library/Android/sdk/platform-tools:$PATH"
+export PATH="/Users/<username>/Library/Android/sdk/ndk-bundle:$PATH"
+```
+
 Edit each `run.sh` to include the serial number of each device (you can get this by running `adb devices`). Also make sure the scripts use different ports (which they should).
 
 ## Usage
