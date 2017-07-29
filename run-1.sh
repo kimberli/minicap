@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 serial=e2a9f08d
+port=8888
 
 # Fail on error, verbose output
 set -exo pipefail
@@ -53,6 +54,9 @@ if [ -e jni/minicap-shared/aosp/libs/android-$rel/$abi/minicap.so ]; then
 else
   adb -s $serial push jni/minicap-shared/aosp/libs/android-$sdk/$abi/minicap.so $dir
 fi
+
+# Forward
+adb -s $serial forward tcp:$port localabstract:minicap
 
 # Run!
 adb -s $serial shell LD_LIBRARY_PATH=$dir $dir/$bin $args "$@"

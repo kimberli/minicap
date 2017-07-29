@@ -3,12 +3,14 @@
 ## Setup
 Add the directories for `ndk-build` and `adb` to your `$PATH` (in `~/.bash_profile`). On a Mac, these might be in `/Users/<username>/Library/Android/sdk/ndk-bundle` and `/Users/<username>/Library/Android/sdk/platform-tools`.
 
-Edit each `run.sh` to include the serial number of each device (you can get this by running `adb devices`). 
+Edit each `run.sh` to include the serial number of each device (you can get this by running `adb devices`). Also make sure the scripts use different ports (which they should).
 
 ## Usage
 Run `run-1.sh autosize` and `run-2.sh autosize`.
 
-You can test to see if this works by running with the options `autosize -s` and then piping the output to a JPEG file, but you might have to remove the intermediate command outputs.
+You can test to see if the basic minicap functionality works by running with the options `autosize -s` and then piping the output to a JPEG file, but you might have to remove the intermediate command outputs.
+
+To test the socket connection, use netcat (`nc <host> <port>`).
 
 # Original minicap documentation
 
