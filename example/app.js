@@ -7,22 +7,24 @@ var WebSocketServer = require('ws').Server
 
 var PORT = process.env.PORT || 9002
 
+var stream1, stream2
+
 app.use(express.static(path.join(__dirname, '/public')))
 
 var server = http.createServer(app)
 var wss = new WebSocketServer({ server: server })
 
-wss.on('connection', function(ws) {
-  console.info('Got a client')
+var sockets = []
 
-  var stream = net.connect({
-    port: 8888
+function broadcastMsg(base64img, port) {
+  sockets.forEach(function(ws) {
+    ws.send(JSON.stringify({img: base64img, port: port}), {
+      binary: false
+    })
   })
+}
 
-  stream.on('error', function() {
-    console.error('Be sure to run `adb forward tcp:8888 localabstract:minicap`')
-    process.exit(1)
-  })
+function makeReader(port, stream) {
 
   var readBannerBytes = 0
   var bannerLength = 2
@@ -134,9 +136,9 @@ wss.on('connection', function(ws) {
               process.exit(1)
             }
 
-            ws.send(frameBody, {
-              binary: true
-            })
+            base64img = frameBody.toString('base64');
+
+            broadcastMsg(base64img, port)
 
             cursor += frameBodyLength
             frameBodyLength = readFrameBytes = 0
@@ -158,14 +160,41 @@ wss.on('connection', function(ws) {
       }
     }
   }
+  return tryRead;
+}
 
-  stream.on('readable', tryRead)
+function listenToPhones() {
 
-  ws.on('close', function() {
-    console.info('Lost a client')
-    stream.end()
+  stream1 = net.connect({
+    port: 8888
+  })
+
+  stream2 = net.connect({
+    port: 8889
+  })
+
+  stream1.on('error', function() {
+    console.error('Be sure to run `adb forward tcp:8888 localabstract:minicap`')
+  })
+
+  stream2.on('error', function() {
+    console.error('Be sure to run `adb forward tcp:8889 localabstract:minicap`')
+  })
+
+  stream1.on('readable', makeReader(8888, stream1))
+  stream2.on('readable', makeReader(8889, stream2))
+
+}
+
+wss.on('connection', function(ws) {
+  console.info('Got a client')
+  sockets.push(ws)
+  ws.on('close', function(ws) {
+    stream1.close()
+    stream2.close()
   })
 })
 
+listenToPhones();
 server.listen(PORT)
 console.info('Listening on port %d', PORT)

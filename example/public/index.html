@@ -1,5 +1,12 @@
 <!doctype html>
-<canvas id="canvas" style="border: 1px solid red;"></canvas>
+<script
+  src="http://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+<body>
+  <canvas id="canvas1" style="border: 1px solid red;"></canvas>
+  <canvas id="canvas2" style="border: 1px solid red;"></canvas>
+</body>
 
 <script>
 /*jshint browser:true*/
@@ -7,8 +14,11 @@
 var BLANK_IMG =
   'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
 
-var canvas = document.getElementById('canvas')
-  , g = canvas.getContext('2d')
+var canvas1 = document.getElementById('canvas1')
+  , g1 = canvas1.getContext('2d')
+
+var canvas2 = document.getElementById('canvas2')
+  , g2 = canvas2.getContext('2d')
 
 var ws = new WebSocket('ws://localhost:9002', 'minicap')
 ws.binaryType = 'blob'
@@ -22,22 +32,26 @@ ws.onerror = function() {
 }
 
 ws.onmessage = function(message) {
-  var blob = new Blob([message.data], {type: 'image/jpeg'})
-  var URL = window.URL || window.webkitURL
+  var URL = window.URL || window.webkitURL;
+  var data = JSON.parse(message.data);
   var img = new Image()
-  img.onload = function() {
-    console.log(img.width, img.height)
-    canvas.width = img.width
-    canvas.height = img.height
-    g.drawImage(img, 0, 0)
-    img.onload = null
-    img.src = BLANK_IMG
-    img = null
-    u = null
-    blob = null
+  img.src = 'data:image/jpeg;base64, ' + data.img;
+  console.log('received from ' + data.port);
+  if (data.port === 8888) {
+    img.onload = function() {
+      canvas1.height = img.height;
+      canvas1.width = img.width;
+      img.onload = null
+      g1.drawImage(img, 0, 0); 
+    }
+  } else {
+    img.onload = function() {
+      canvas2.height = img.height;
+      canvas2.width = img.width;
+      img.onload = null
+      g2.drawImage(img, 0, 0); 
+    }
   }
-  var u = URL.createObjectURL(blob)
-  img.src = u
 }
 
 ws.onopen = function() {
