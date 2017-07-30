@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 serial=da25363e
-port=8888
+port=8889
 height=1080
 width=1920
 
