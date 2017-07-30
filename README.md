@@ -20,6 +20,8 @@ You can test to see if the basic minicap functionality works by running with the
 
 To test the socket connection, use netcat (`nc <host> <port>`).
 
+To make this work with multiple devices, first run `run-1.sh`. Then, head to `jni/minicap/minicap.cpp` and change `DEFAULT_SOCKET_NAME` to be `minicapx`. Then run `run-2.sh`. This is because we need to make sure the two devices are communicating on separate unix sockets.
+
 # Original minicap documentation
 
 Minicap provides a socket interface for streaming realtime screen capture data out of Android devices. It is meant to be used as a component in a larger program and is therefore not immensely useful just by itself. For example, it is being used in [STF](https://github.com/openstf/stf) for remote control.
