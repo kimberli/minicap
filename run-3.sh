@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-serial=e2a9f08d
+serial=da25363e
 port=8888
-height=1920
-width=1080
+height=1080
+width=1920
 
 # Fail on error, verbose output
 set -exo pipefail

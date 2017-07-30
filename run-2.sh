@@ -2,8 +2,8 @@
 
 serial=7519ab65
 port=8889
-width=1080
-height=1920
+width=1920
+height=1080
 
 # Fail on error, verbose output
 set -exo pipefail
