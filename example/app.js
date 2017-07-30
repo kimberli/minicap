@@ -14,13 +14,17 @@ app.use(express.static(path.join(__dirname, '/public')))
 var server = http.createServer(app)
 var wss = new WebSocketServer({ server: server })
 
-var sockets = []
+var sockets = new Set()
 
 function broadcastMsg(base64img, port) {
   sockets.forEach(function(ws) {
-    ws.send(JSON.stringify({img: base64img, port: port}), {
-      binary: false
-    })
+    try {
+      ws.send(JSON.stringify({img: base64img, port: port}), {
+        binary: false
+      })
+    } catch(err) {
+      sockets.delete(ws);
+    }
   })
 }
 
@@ -188,10 +192,10 @@ function listenToPhones() {
 
 wss.on('connection', function(ws) {
   console.info('Got a client')
-  sockets.push(ws)
+  sockets.add(ws)
   ws.on('close', function(ws) {
-    stream1.close()
-    stream2.close()
+    console.log('Lost a client')
+    sockets.delete(ws)
   })
 })
 

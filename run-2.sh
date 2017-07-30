@@ -49,7 +49,7 @@ else
 fi
 
 # Forward
-adb -s $serial forward tcp:$port localabstract:minicap
+adb -s $serial forward tcp:$port localabstract:minicapx
 
 # Run!
 adb -s $serial shell LD_LIBRARY_PATH=$dir $dir/$bin $args "$@"
